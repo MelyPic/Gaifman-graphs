@@ -73,7 +73,8 @@ def MatrixExponential(Matrix, MyGraph):
 				if v == 0:
 					InInterval = 0
 				else:
-					InInterval = floor(log(v,2))  # funcion techo del logaritmo
+					InInterval = floor(log(v,2))  # funcion piso del logaritmo
+					#InInterval = ceil(log(v+1,2)) # without 1osing 1 
 				MyGraph[i].append(str(int(InInterval)))
 				if InInterval != 0:
 					LA[i].append(j)
@@ -817,7 +818,8 @@ def ReadFile():
 			ArffFile(filename_ext, GraphMatrix)
 			filename = filename_ext.replace('.arff', '')
 		elif '.txt' in filename_ext:
-			TxtFile_ValueEqualAttribute(filename_ext,GraphMatrix)
+			TxtFile_ValueEqualAttribute(filename_ext,GraphMatrix)#mushroom,hospitalization,votes
+			#TxtFile(filename_ext, GraphMatrix)#titanic
 			filename = filename_ext.replace('.txt', '')
 		elif '.csv' in filename_ext:
 			CsvFile(filename_ext, GraphMatrix)
