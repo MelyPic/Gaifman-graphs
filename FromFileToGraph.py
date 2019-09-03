@@ -35,13 +35,11 @@ def MatrixToShortestPathM(Matrix, MyGraph, threshold):
             if i == j:
                 MyGraph[i].append('None')
             elif int(Matrix[i][j][0]) >= threshold:
-                # MyGraph[i].append('black')
                 MyGraph[i].append('1')
                 LA[i].append(j)
             else:
                 MyGraph[i].append('0')
-                # MyGraph[i].append('red')
-
+                
 '''
 Generate a linear matrix MyGraph dividing the original matrix Matrix in intervals of size IntevalSize
 '''
@@ -181,7 +179,6 @@ Shortest path of a graph with general values
 '''
 def ShortestPathFromToGeneralMatrix(i,j,path,LA,found):
 	path += 1
-	#found = False
 	k=0
 	while k< len(LA[j]) and not found:
 		if LA[j][k] in LA[i]:
@@ -196,13 +193,10 @@ def ShortestPathFromToGeneralMatrix(i,j,path,LA,found):
 		for l in LA[j]:
 			#print (l,'path', ShortestPathFromToGeneralMatrix(i,l,path,LA,found))
 			paths.append(ShortestPathFromToGeneralMatrix(i, l, path,LA,found))
-		print ('cucurrucucu: ',paths)
 		if paths != []:
 			#print (min(paths))
-			#found = True
 			return min(paths)
 		else:
-			#found = True
 			return -1
 		
 		
@@ -249,12 +243,9 @@ def MatrixToMATPD(Matrix, MyGraph, threshold):
             if i == j:
                 MyGraph[i].append('None')
             elif Matrix[i][j][0] > threshold:
-                # MyGraph[i].append('black')
                 MyGraph[i].append('1')
-                # MyGraph[i].append(str(Matrix[i][j][0]))
                 LA[i].append(j)
             else:
-                # MyGraph[i].append('white')
                 MyGraph[i].append('0')
 
 
@@ -277,20 +268,16 @@ def WhereStart(AttributeValueQuantity):
 From txt To Matrix
 '''
 def TxtFile(filename, GraphMatrix):
-    # #print 'txt'
     fileop = open(filename, "r")
     AttributeValueQuantity = []
     AttributeNameList = []
     AttributeValueList = []
     TotalValues = 0
-
     AttributeNameList = fileop.readline().split()
     for i in range(len(AttributeNameList)):
         AttributeValueQuantity.append(0)
         AttributeValueList.append([])
 
-    # line = fileop.readline()
-    # while line != '':
     it = islice(fileop, 0, None)
     for line in it:
         AtributesLine = line.split()
@@ -301,27 +288,19 @@ def TxtFile(filename, GraphMatrix):
                 TotalValues += 1
     fileop.close()
 
-    # #print 'Total de atributos:', len(AttributeValueQuantity)
-    # #print 'Atributos y valores:'
-    # for i in range(len(AttributeNameList)):
-    #	#print AttributeNameList[i],':',AttributeValueQuantity[i],',',AttributeValueList[i]
-
     # genera matriz con ceros
     for i in range(TotalValues):
         l = []
         for j in range(TotalValues):
             l.append([0])
         GraphMatrix.append(l)
-    # for i in GraphMatrix:
-    #	#print i
-
     # Para saber el indice donde comienzan los valores de cada atributo
     WS = WhereStart(AttributeValueQuantity)
 
     fileop = open(filename, "r")
     it = islice(fileop, 1, None)
     for line in it:
-        # #print line
+        
         LineElements = line.split(' ')
         i = 0
         while i < len(LineElements) - 1:
@@ -333,13 +312,10 @@ def TxtFile(filename, GraphMatrix):
             for j in range(i + 1, len(LineElements)):
                 if '\n' in LineElements[j]:
                     LineElements[j] = LineElements[j].replace('\n', '')
-                # #print LineElements[j], ' in ',AttributeValueList[j]
                 column = WS[j] + AttributeValueList[j].index(LineElements[j])
-                # #print 'Agregar uno al elemento en:', row,column
                 GraphMatrix[row][column][0] = int(GraphMatrix[row][column][0]) + 1
                 GraphMatrix[column][row][0] = int(GraphMatrix[column][row][0]) + 1
             i += 1
-    # #print 'Total values',TotalValues
     for i in range(len(AttributeNameList)):
         TotalAttributesValues.extend(AttributeValueList[i])
     fileop.close()
@@ -348,7 +324,6 @@ def TxtFile(filename, GraphMatrix):
 From txt To Matrix each value is an attribute
 '''
 def TxtFile_ValueEqualAttribute(filename, GraphMatrix):
-    # #print 'txt'
 	fileop = open(filename, "r")
 	AttributeValueQuantity = []
 	AttributeNameList = []
@@ -366,22 +341,17 @@ def TxtFile_ValueEqualAttribute(filename, GraphMatrix):
 					AttributeValueList.append(i)
 					TotalValues += 1
 	fileop.close()
-	#print len(AttributeNameList)
-	#print AttributeValueList
 	for i in range(TotalValues):
 		l = []
 		for j in range(TotalValues):
 			l.append([0])
 		GraphMatrix.append(l)
-	#for i in GraphMatrix:
-	#	#print i
-
+	
      #Para saber el indice donde comienzan los valores de cada atributo
 	WS = WhereStart(AttributeValueQuantity)
 	fileop = open(filename, "r")
 	it = islice(fileop, 1, None)
 	for line in it:
-		##print line
 		LineElements = line.split(',')
 		for i in range(len(LineElements)):
 			LineElements[i] = LineElements[i].replace('\n','')
@@ -393,11 +363,7 @@ def TxtFile_ValueEqualAttribute(filename, GraphMatrix):
 						index_j = AttributeNameList.index(LineElements[j])
 						GraphMatrix[index_i][index_j][0]+=1
 						GraphMatrix[index_j][index_i][0]+=1
-						##print index_i, index_j
-		#exit(1)
-	#for i in range(len(AttributeNameList)):
 	TotalAttributesValues.extend(AttributeValueList)
-		#TotalAttributesValues.extend(AttributeValueList[i])
 	fileop.close()
 
 '''
@@ -411,51 +377,34 @@ def TxtFile_AttributeNameBeforeValue(filename, GraphMatrix):
 	TotalValues = 0
 	Line = fileop.readline().split(',')
 	for i in range(len(Line)):
-		#print Line[i]
 		if '_' in Line[i]:
 			PossibleAttribute = Line[i][:Line[i].index('_')].replace('\n','')
-			#print 'possible attribute ', PossibleAttribute
 			if PossibleAttribute:
 				if PossibleAttribute not in AttributeNameList:
 					AttributeNameList.append(PossibleAttribute)
 					AttributeValueQuantity.append(0)
 					AttributeValueList.append([])
-	#print AttributeNameList
 	it = islice (fileop,0,None)
 	for AllLine in it:
 		Line = AllLine.split(',')
 		for i in range(len(Line)):
 			if '_' in Line[i]:
 				Attribute = Line[i][:Line[i].index('_')].replace('\n','')
-				#ValueToBeAdded = Line[i][Line[i].index('_')+1:].replace('\n','').replace(' ','')
 				ValueToBeAdded = Line[i].replace('\n','').replace(' ','')
-				##print Attribute
 				if ValueToBeAdded:
 					IndexToBeAdded = AttributeNameList.index(Attribute)
 					if ValueToBeAdded not in AttributeValueList[IndexToBeAdded]:
 						AttributeValueList[IndexToBeAdded].append(ValueToBeAdded)
 						AttributeValueQuantity[IndexToBeAdded]+=1
 						TotalValues+=1
-	#print len(AttributeValueList),'--', TotalValues
 	fileop.close()
-	#exit(1)
-	
-	# #print 'Total de atributos:', len(AttributeValueQuantity)
-    # #print 'Atributos y valores:'
-    # for i in range(len(AttributeNameList)):
-    #	#print AttributeNameList[i],':',AttributeValueQuantity[i],',',AttributeValueList[i]
-
     # genera matriz con ceros
-    
-	
 	for i in range(TotalValues):
 		l = []
 		for j in range(TotalValues):
 			l.append([0])
 		GraphMatrix.append(l)
-	#for i in GraphMatrix:
-	#	#print i
-
+	
     # Para saber el indice donde comienzan los valores de cada atributo
 	WS = WhereStart(AttributeValueQuantity)
 	fileop = open(filename, "r")
@@ -466,25 +415,19 @@ def TxtFile_AttributeNameBeforeValue(filename, GraphMatrix):
 		for i in range(len(LineElements)-1):
 			for j in range(i+1,len(LineElements)):
 				if '_' in LineElements[i] and '_' in LineElements[j]:
-					##print LineElements[i],'-',LineElements[j]
 					Attribute = LineElements[i][:LineElements[i].index('_')].replace('\n','')
-					#Value = LineElements[i][LineElements[i].index('_')+1:].replace('\n','').replace(' ','')
 					Value = LineElements[i].replace('\n','').replace(' ','')
 					AttributeIndex =AttributeNameList.index(Attribute)
 					row = WS[AttributeIndex] + AttributeValueList[AttributeIndex].index(Value)
 					Attribute2 = LineElements[j][:LineElements[j].index('_')].replace('\n','')
 					Attribute2Index = AttributeNameList.index(Attribute2)
-					#Value2 = LineElements[j][LineElements[j].index('_')+1:].replace('\n','').replace(' ','')
 					Value2 = LineElements[j].replace('\n','').replace(' ','')
 					column = WS[Attribute2Index] + AttributeValueList[Attribute2Index].index(Value2)
 					GraphMatrix[row][column][0]=int(GraphMatrix[row][column][0])+1
 					GraphMatrix[column][row][0]=int(GraphMatrix[column][row][0])+1
-					##print Attribute ,' y ', Attribute2, ' de ', AttributeNameList[AttributeIndex],'-', AttributeNameList[Attribute2Index]
-	
-    # #print 'Total values',TotalValues
+					
 	for i in range(len(AttributeNameList)):
 		TotalAttributesValues.extend(AttributeValueList[i])
-	#print 'TOTAL ATTributeValues: ', TotalAttributesValues
 	fileop.close()
 
 
@@ -498,19 +441,12 @@ def CsvFile(filename, GraphMatrix):
 	AttributeValueList = []
 	TotalValues = 0
 	AttributeNameList = fileop.readline().split(',')
-	##print 'AttributeNameList:', len(AttributeNameList), AttributeNameList
 	for i in range(len(AttributeNameList)):
 		AttributeValueQuantity.append(0)
 		AttributeValueList.append([])
-	##print 'AttributeValueQuantity', len(AttributeValueQuantity) 
-	##print 'AttributeValueList', len(AttributeValueList)
-	# line = fileop.readline()
-	# while line != '':
 	it = islice(fileop, 0, None)
 	for line in it:
 		AtributesLine = line.split(',')
-		##print 'Attribute line:', len(AtributesLine), AtributesLine
-		##print 'Attribute values:', len(AttributeValueList), AttributeValueList
 		for i in range(len(AtributesLine)):
 			if '\n' in AtributesLine[i]:
 				AtributesLine[i] = AtributesLine[i].replace('\n','')
@@ -519,24 +455,16 @@ def CsvFile(filename, GraphMatrix):
 				AttributeValueQuantity[i] += 1
 				TotalValues += 1
 	fileop.close()
-	# #print 'Total de atributos:', len(AttributeValueQuantity)
-	# #print 'Atributos y valores:'
-	# for i in range(len(AttributeNameList)):
-	##print AttributeNameList[i],':',AttributeValueQuantity[i],',',AttributeValueList[i]
-	# genera matriz con ceros
 	for i in range(TotalValues):
 		l = []
 		for j in range(TotalValues):
 			l.append([0])
 		GraphMatrix.append(l)
-	# for i in GraphMatrix:
-	#	#print i
 	# Para saber el indice donde comienzan los valores de cada atributo
 	WS = WhereStart(AttributeValueQuantity)
 	fileop = open(filename, "r")
 	it = islice(fileop, 1, None)
 	for line in it:
-		# #print line
 		LineElements = line.split(',')
 		i = 0
 		while i < len(LineElements) - 1:
@@ -547,13 +475,11 @@ def CsvFile(filename, GraphMatrix):
 			for j in range(i + 1, len(LineElements)):
 				if '\n' in LineElements[j]:
 					LineElements[j] = LineElements[j].replace('\n', '')
-				# #print LineElements[j], ' in ',AttributeValueList[j]
 				column = WS[j] + AttributeValueList[j].index(LineElements[j])
 				# #print 'Agregar uno al elemento en:', row,column
 				GraphMatrix[row][column][0] = int(GraphMatrix[row][column][0]) + 1
 				GraphMatrix[column][row][0] = int(GraphMatrix[column][row][0]) + 1
 			i += 1
-	# #print 'Total values',TotalValues
 	for i in range(len(AttributeNameList)):
 		TotalAttributesValues.extend(AttributeValueList[i])
 	fileop.close()
@@ -637,8 +563,6 @@ def DocumentsTxtFile(GraphMatrix):
     for i in AttributeValueList:
         TotalAttributesValues.extend(i)
 
-    #print '******************************'
-    #print TotalAttributesValues    
     
 
 '''
@@ -679,27 +603,18 @@ def ArffFile(filename, GraphMatrix):
                 AttributeValueList.append([])
         linenumber += 1
         line = fileop.readline()
-    # #print 'Total de atributos:', len(AttributeValueQuantity)
-    # #print 'Total de valores:', TotalValues
-    # #print 'Atributos y valores:'
-    # for i in range(len(AttributeNameList)):
-    #	#print AttributeNameList[i],':',AttributeValueQuantity[i],',',AttributeValueList[i]
-
+   
     CompleteValues = True
     i = 0
     while CompleteValues and i < len(AttributeValueQuantity):
-        # #print AttributeValueQuantity[i]
         if AttributeValueQuantity[i] == 0:
             CompleteValues = False
         else:
             i += 1
 
     if not CompleteValues:
-        # #print 'there are attributes with non determinated values'
-        # Sabe donde se quedo, en ese caso no se necesita linenumber
         it = islice(fileop, 0, None)
         for line in it:
-            # #print '*****',line
             if '%' not in line:
                 AtributesLine = line.split(',')
                 for i in range(len(AtributesLine)):
@@ -711,18 +626,11 @@ def ArffFile(filename, GraphMatrix):
                         TotalValues += 1
         fileop.close()
 
-        # #print 'Total de atributos:', len(AttributeValueQuantity)
-        # #print 'Atributos y valores:'
-        # for i in range(len(AttributeNameList)):
-        #	#print AttributeNameList[i],':',AttributeValueQuantity[i],',',AttributeValueList[i]
-
         for i in range(TotalValues):
             l = []
             for j in range(TotalValues):
                 l.append([0])
             GraphMatrix.append(l)
-        # for i in GraphMatrix:
-        #	#print i
 
         WS = WhereStart(AttributeValueQuantity)
 
@@ -730,7 +638,6 @@ def ArffFile(filename, GraphMatrix):
         it = islice(fileop, linenumber, None)
         for line in it:
             if '%' not in line:
-                # #print line
                 LineElements = line.split(',')
                 i = 0
                 while i < len(LineElements) - 1:
@@ -742,27 +649,21 @@ def ArffFile(filename, GraphMatrix):
                     for j in range(i + 1, len(LineElements)):
                         if '\n' in LineElements[j]:
                             LineElements[j] = LineElements[j].replace('\n', '')
-                        # #print LineElements[j], ' in ',AttributeValueList[j]
                         column = WS[j] + AttributeValueList[j].index(LineElements[j])
-                        # #print 'Agregar uno al elemento en:', row,column
                         GraphMatrix[row][column][0] = int(GraphMatrix[row][column][0]) + 1
                         GraphMatrix[column][row][0] = int(GraphMatrix[column][row][0]) + 1
                     i += 1
-
     else:
         for i in range(TotalValues):
             l = []
             for j in range(TotalValues):
                 l.append([0])
             GraphMatrix.append(l)
-        # for i in GraphMatrix:
-        #	#print i
 
         WS = WhereStart(AttributeValueQuantity)
         it = islice(fileop, 0, None)
         for line in it:
             if '%' not in line:
-                # #print line
                 LineElements = line.split(',')
                 i = 0
                 while i < len(LineElements) - 1:
@@ -774,13 +675,10 @@ def ArffFile(filename, GraphMatrix):
                     for j in range(i + 1, len(LineElements)):
                         if '\n' in LineElements[j]:
                             LineElements[j] = LineElements[j].replace('\n', '')
-                        # #print LineElements[j], ' in ',AttributeValueList[j]
                         column = WS[j] + AttributeValueList[j].index(LineElements[j])
-                        # #print 'Agregar uno al elemento en:', row,column
                         GraphMatrix[row][column][0] = int(GraphMatrix[row][column][0]) + 1
                         GraphMatrix[column][row][0] = int(GraphMatrix[column][row][0]) + 1
                     i += 1
-    # #print 'Total values',TotalValues
     for i in range(len(AttributeNameList)):
         TotalAttributesValues.extend(AttributeValueList[i])
     fileop.close()
@@ -804,9 +702,6 @@ def DocumentsArffFile(GraphMatrix):
     TotalValues = 0
 
     for filename in os.listdir(files_path):
-        # #print f
-        # filename = filename.replace('.arff', '')
-        # fileop = open(filename, "r")
         fileop = open(files_path + '/' + filename, "r")
         line = fileop.readline()
         linenumber = 1
@@ -832,11 +727,6 @@ def DocumentsArffFile(GraphMatrix):
                     AttributeValueList.append([])
             linenumber += 1
             line = fileop.readline()
-        # #print 'Total de atributos:', len(AttributeValueQuantity)
-        # #print 'Total de valores:', TotalValues
-        # #print 'Atributos y valores:'
-        # for i in range(len(AttributeNameList)):
-        #	#print AttributeNameList[i],':',AttributeValueQuantity[i],',',AttributeValueList[i]
         CompleteValues = True
         i = 0
         while CompleteValues and i < len(AttributeValueQuantity):
@@ -847,11 +737,8 @@ def DocumentsArffFile(GraphMatrix):
                 i += 1
 
         if not CompleteValues:
-            # #print 'there are attributes with non determinated values'
-            # Sabe donde se quedo, en ese caso no se necesita linenumber
             it = islice(fileop, 0, None)
             for line in it:
-                # #print '*****',line
                 if '%' not in line:
                     AtributesLine = line.split(',')
                     for i in range(len(AtributesLine)):
@@ -863,18 +750,11 @@ def DocumentsArffFile(GraphMatrix):
                             TotalValues += 1
             fileop.close()
 
-            # #print 'Total de atributos:', len(AttributeValueQuantity)
-            # #print 'Atributos y valores:'
-            # for i in range(len(AttributeNameList)):
-            # #print AttributeNameList[i],':',AttributeValueQuantity[i],',',AttributeValueList[i]
-
         for i in range(TotalValues):
             l = []
             for j in range(TotalValues):
                 l.append([0])
             GraphMatrix.append(l)
-            # for i in GraphMatrix:
-            #	#print i
 
         WS = WhereStart(AttributeValueQuantity)
 
@@ -883,22 +763,17 @@ def DocumentsArffFile(GraphMatrix):
             it = islice(fileop, linenumber, None)
             for line in it:
                 if '%' not in line:
-                    # #print line
                     LineElements = line.split(',')
                     i = 0
                     while i < len(LineElements) - 1:
                         if i == 0:
-                            row = AttributeValueList[0].index(
-                                LineElements[
-                                    0])  # Dentro de la lista de valores del atributo i, busca el indice del valor
+                            row = AttributeValueList[0].index(LineElements[0])  # Dentro de la lista de valores del atributo i, busca el indice del valor
                         else:
                             row = WS[i] + AttributeValueList[i].index(LineElements[i])
                         for j in range(i + 1, len(LineElements)):
                             if '\n' in LineElements[j]:
                                 LineElements[j] = LineElements[j].replace('\n', '')
-                            # #print LineElements[j], ' in ',AttributeValueList[j]
                             column = WS[j] + AttributeValueList[j].index(LineElements[j])
-                            #   #print 'Agregar uno al elemento en:', row,column
                             GraphMatrix[row][column][0] = int(GraphMatrix[row][column][0]) + 1
                             GraphMatrix[column][row][0] = int(GraphMatrix[column][row][0]) + 1
                         i += 1
@@ -909,33 +784,24 @@ def DocumentsArffFile(GraphMatrix):
                 for j in range(TotalValues):
                     l.append([0])
                 GraphMatrix.append(l)
-            # for i in GraphMatrix:
-            #	#print i
-
             WS = WhereStart(AttributeValueQuantity)
             it = islice(fileop, 0, None)
             for line in it:
                 if '%' not in line:
-                    # #print line
                     LineElements = line.split(',')
                     i = 0
                     while i < len(LineElements) - 1:
                         if i == 0:
-                            row = AttributeValueList[0].index(
-                                LineElements[
-                                    0])  # Dentro de la lista de valores del atributo i, busca el indice del valor
+                            row = AttributeValueList[0].index(LineElements[0])  # Dentro de la lista de valores del atributo i, busca el indice del valor
                         else:
                             row = WS[i] + AttributeValueList[i].index(LineElements[i])
                         for j in range(i + 1, len(LineElements)):
                             if '\n' in LineElements[j]:
                                 LineElements[j] = LineElements[j].replace('\n', '')
-                            # #print LineElements[j], ' in ',AttributeValueList[j]
                             column = WS[j] + AttributeValueList[j].index(LineElements[j])
-                            # #print 'Agregar uno al elemento en:', row,column
                             GraphMatrix[row][column][0] = int(GraphMatrix[row][column][0]) + 1
                             GraphMatrix[column][row][0] = int(GraphMatrix[column][row][0]) + 1
                         i += 1
-        # #print 'Total values',TotalValues
         for i in range(len(AttributeNameList)):
             TotalAttributesValues.extend(AttributeValueList[i])
         fileop.close()
@@ -952,14 +818,10 @@ def ReadFile():
 			filename = filename_ext.replace('.arff', '')
 		elif '.txt' in filename_ext:
 			TxtFile_ValueEqualAttribute(filename_ext,GraphMatrix)
-			#TxtFile_AttributeNameBeforeValue(filename_ext,GraphMatrix)
-			#TxtFile(filename_ext, GraphMatrix)
-            #CsvFile(filename_ext, GraphMatrix)
 			filename = filename_ext.replace('.txt', '')
 		elif '.csv' in filename_ext:
 			CsvFile(filename_ext, GraphMatrix)
 			filename = filename_ext.replace('.csv', '')
-
 
 # Histogram
 
@@ -1046,10 +908,9 @@ if GraphMatrix != []:
 		MyGraph = GraphMatrix
 	if '2' in ans:
 		threshold = input('The edges greater than the threshold will be considered. Give a threshold: ')
-		# threshold ='0'
 		MatrixToMATPD(GraphMatrix, MyGraph, int(threshold))
-		for i in MyGraph:
-			print (i)
+		#for i in MyGraph:
+		#	print (i)
 	elif '3' in ans:
 		lowerthreshold = input('Give a lower threshold:')
 		upperthreshold = input('Give a upper threshold (0 = not upper threshold):')
@@ -1066,27 +927,22 @@ if GraphMatrix != []:
 					if i != j and int(GraphMatrix[i][j][0]) > int(upperthreshold):
 						GraphMatrix[i][j][0] = sameclass
 		MatrixLinear(GraphMatrix, MyGraph, IntervalSize)
-		for i in MyGraph:
-			print (i)
+		#for i in MyGraph:
+		#	print (i)
 	elif '4' in ans:
 		ShortestPathGraph = []
 		if '1' in opt or '2' in opt:
-			#ShortestPathGraph = gen_ShortestPathGraph(MyGraph)
 			ShortestPathGraph = MatrixShortestPaths(GraphMatrix)
-			print ('Here')
-			print(ShortestPathGraph)
 		else:
 			ShortestPathGraph = gen_ShortestPathMatixFromNetxG(NG)
-		#OutputFile.write('ShortestPath\n')
-		for i in ShortestPathGraph:
-			print (i)
-			#OutputFile.write(str(i) + '\n')
+		#for i in ShortestPathGraph:
+		#	print (i)
 		threshold = input('The length paths less or equal to threshold will be considered. Give a threshold: ')
 		MatrixToShortestPathM(ShortestPathGraph, MyGraph, int(threshold))
 		#OutputFile.write('-----------\n')
 		#OutputFile.write('Threshold: ' + threshold + '\n')
-		for i in MyGraph:
-			print (i)
+		#for i in MyGraph:
+			#print (i)
 			#OutputFile.write(str(i) + '\n')
 	elif '5' in ans:
 		if '1' in opt or '2' in opt:
@@ -1102,9 +958,9 @@ if GraphMatrix != []:
 			MatrixToShortestPathM(ShortestPathGraph, MyGraph, int(threshold))
 			OutputFile.write('-----------\n')
 			OutputFile.write('Threshold: ' + threshold + '\n')
-			for i in MyGraph:
+			#for i in MyGraph:
 				#print i
-				OutputFile.write(str(i) + '\n')
+				#OutputFile.write(str(i) + '\n')
 	elif '6' in ans:
 		lowerthreshold = input('Give a lower threshold:')
 		upperthreshold = input('Give a upper threshold (0 = not upper threshold):')
@@ -1120,17 +976,17 @@ if GraphMatrix != []:
 					if i != j and int(GraphMatrix[i][j][0]) > int(upperthreshold):
 						GraphMatrix[i][j][0] = sameclass
 		MatrixExponential(GraphMatrix, MyGraph)
-		for i in MyGraph:
-			print (i)
+		#for i in MyGraph:
+			#print (i)
 	elif '7' in ans:
 		MatrixPlain(GraphMatrix,MyGraph)
-		for i in MyGraph:
-			print (i)
+		#for i in MyGraph:
+		#	print (i)
               
 	
 	
 	
-print(TotalAttributesValues)	
-for i in TotalAttributesValues:
-	print (i)
+#print(TotalAttributesValues)	
+#for i in TotalAttributesValues:
+#	print (i)
 
