@@ -989,6 +989,11 @@ if GraphMatrix != []:
 	
 	
 #print(TotalAttributesValues)	
-#for i in TotalAttributesValues:
+for i in range(len(TotalAttributesValues)):
+	TotalAttributesValues[i] = TotalAttributesValues[i].replace(".","p")
+	TotalAttributesValues[i] = TotalAttributesValues[i].replace(":","_")
+	TotalAttributesValues[i] = TotalAttributesValues[i].replace("-","_")
+	TotalAttributesValues[i] = TotalAttributesValues[i].replace("?","DN")
+	
 #	print (i)
 
